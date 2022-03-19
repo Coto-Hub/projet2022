@@ -12,23 +12,23 @@
 
 <script>
 export default {
-  name: 'ShowClassroom',
+  name: 'ShowEvaluation',
   props: {},
   data: function () {
     return {
       db: null,
       ready:false,
       addDisabled:false,
-      classrooms:[]
+      evaluations:[]
     }
   },
   async created() {
     this.db = await this.getDb();
-    this.classrooms = await this.getEvaluationFromDb();
+    this.evaluations = await this.getEvaluationFromDb();
     this.ready = true;
   },
   methods: {
-    async addEval() {
+    async addEvaluation() {
       this.addDisabled = true;
       // random cat for now
       let evaluation = {
@@ -36,12 +36,12 @@ export default {
       };
       console.log('about to add '+JSON.stringify(evaluation));
       await this.addEvalToDb(evaluation);
-      this.classrooms = await this.getEvaluationFromDb();
+      this.evaluations = await this.getEvaluationFromDb();
       this.addDisabled = false;
     },
     async deleteEval(id) {
       await this.deleteEvalFromDb(id);
-      this.classrooms = await this.getEvaluationFromDb();
+      this.evaluations = await this.getEvaluationFromDb();
     },
     async addEvalToDb(evaluation) {
       return new Promise((resolve) => {
@@ -56,7 +56,7 @@ export default {
 
       });
     },
-    async deleteClassFromDb(id) {
+    async deleteEvalFromDb(id) {
       return new Promise((resolve) => {
         let trans = this.db.transaction(['evaluation'],'readwrite');
         trans.oncomplete = () => {
@@ -67,7 +67,7 @@ export default {
         store.delete(id);
       });
     },
-    async getClassroomFromDb() {
+    async getEvaluationFromDb() {
       return new Promise((resolve) => {
 
         let trans = this.db.transaction(['evaluation'],'readonly');
@@ -75,7 +75,7 @@ export default {
           resolve(evaluations);
         };
 
-        let store = trans.objectStore('classroom');
+        let store = trans.objectStore('evaluation');
         let evaluations = [];
 
         store.openCursor().onsuccess = e => {
@@ -99,12 +99,6 @@ export default {
 
         request.onsuccess = e => {
           resolve(e.target.result);
-        };
-
-        request.onupgradeneeded = e => {
-          console.log('onupgradeneeded');
-          let db = e.target.result;
-          db.createObjectStore("classroom", { autoIncrement: true, keyPath:'id' });
         };
       });
     },

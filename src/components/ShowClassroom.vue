@@ -105,6 +105,7 @@ export default {
           console.log('onupgradeneeded');
           let db = e.target.result;
           db.createObjectStore("classroom", { autoIncrement: true, keyPath:'id' });
+          db.createObjectStore("evaluation", { autoIncrement: true, keyPath:'id' });
         };
       });
     },
