@@ -1,18 +1,18 @@
 <template>
   <div id="app">
     <img alt="Vue logo" src="./assets/logo.png">
-    <HelloWorld msg="Hello Alexis"/>
+    <ShowClassroom msg="Hello Alexis"/>
     <font-awesome-icon icon="fa-solid fa-user-secret" />
   </div>
 </template>
 
 <script>
-import HelloWorld from './components/HelloWorld.vue'
+import ShowClassroom from './components/ShowClassroom.vue'
 
 export default {
   name: 'App',
   components: {
-    HelloWorld
+    ShowClassroom
   }
 }
 </script>
