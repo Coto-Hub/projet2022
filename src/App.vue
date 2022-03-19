@@ -1,18 +1,22 @@
 <template>
   <div id="app">
-    <img alt="Vue logo" src="./assets/logo.png">
-    <HelloWorld msg="Welcome to Your Vue.js App"/>
-    <font-awesome-icon icon="fa-solid fa-user-secret" />
+    <MainDisplay app-title="Evaluation">
+      <img alt="Vue logo" src="./assets/logo.png">
+      <HelloWorld msg="Welcome to Your Vue.js App"/>
+      <font-awesome-icon icon="fa-solid fa-user-secret" />
+    </MainDisplay>
   </div>
 </template>
 
 <script>
 import HelloWorld from './components/HelloWorld.vue'
+import MainDisplay from './components/MainDisplay.vue'
 
 export default {
   name: 'App',
   components: {
-    HelloWorld
+    HelloWorld,
+    MainDisplay
   }
 }
 </script>
