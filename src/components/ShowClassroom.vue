@@ -1,10 +1,9 @@
 <template>
-  <div v-if="ready">
+  <div v-if="ready" class="show-classroom">
     <button @click="addClass" :disabled="addDisabled">Add Classroom</button>
-    <p/>
     <ul>
       <li v-for="classroom in classrooms" :key="classroom.id">
-        {{classroom.name}} is {{classroom.age}} years old. <button @click="deleteClass(classroom.id)">Delete</button>
+        {{classroom.name}} <button @click="deleteClass(classroom.id)">Update</button>
       </li>
     </ul>
   </div>
