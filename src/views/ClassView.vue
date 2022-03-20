@@ -1,18 +1,20 @@
 <template>
-  <div v-if="ready">
+  <div v-if="ready" class="show-classroom">
     <button @click="addClass" :disabled="addDisabled">Add Classroom</button>
-    <p/>
     <ul>
       <li v-for="classroom in classrooms" :key="classroom.id">
-        {{classroom.name}} is {{classroom.age}} years old. <button @click="deleteClass(classroom.id)">Delete</button>
+        {{classroom.name}} <button @click="deleteClass(classroom.id)">Update</button>
       </li>
     </ul>
   </div>
 </template>
 
 <script>
+
+import bd from '../script/bd'
+
 export default {
-  name: 'ShowClassroom',
+  name: 'ClassView',
   props: {},
   data: function () {
     return {
@@ -23,7 +25,7 @@ export default {
     }
   },
   async created() {
-    this.db = await this.getDb();
+    this.db = await bd.getDb();
     this.classrooms = await this.getClassroomFromDb();
     this.ready = true;
   },
@@ -84,28 +86,6 @@ export default {
             classrooms.push(cursor.value)
             cursor.continue();
           }
-        };
-      });
-    },
-    async getDb() {
-      return new Promise((resolve, reject) => {
-
-        let request = window.indexedDB.open('evaluationDB', 1);
-
-        request.onerror = e => {
-          console.log('Error opening db', e);
-          reject('Error');
-        };
-
-        request.onsuccess = e => {
-          resolve(e.target.result);
-        };
-
-        request.onupgradeneeded = e => {
-          console.log('onupgradeneeded');
-          let db = e.target.result;
-          db.createObjectStore("classroom", { autoIncrement: true, keyPath:'id' });
-          db.createObjectStore("evaluation", { autoIncrement: true, keyPath:'id' });
         };
       });
     },
