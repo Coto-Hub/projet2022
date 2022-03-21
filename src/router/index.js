@@ -2,6 +2,7 @@ import Vue from 'vue'
 import VueRouter from 'vue-router'
 import HomeView from '../views/HomeView.vue'
 import ClassView from '../views/ClassView.vue'
+import OneClassView from '../views/OneClassView.vue'
 
 Vue.use(VueRouter)
 
@@ -12,9 +13,14 @@ const routes = [
     component: HomeView
   },
   {
-    path: '/classroom',
-    name: 'ShowClassroom',
+    path: '/classrooms',
+    name: 'ShowClassrooms',
     component: ClassView,
+  },
+  {
+    path: '/classroom/:id',
+    name: 'ShowOneClassroom',
+    component: OneClassView,
   }
 ]
 
