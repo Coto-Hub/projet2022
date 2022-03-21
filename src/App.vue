@@ -7,14 +7,3 @@
     <router-view/>
   </div>
 </template>
-
-<script>
-import ShowClassroom from './components/ShowClassroom.vue'
-
-export default {
-  name: 'App',
-  components: {
-    ShowClassroom
-  }
-}
-</script>
