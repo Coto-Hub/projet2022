@@ -3,6 +3,8 @@ import VueRouter from 'vue-router'
 import HomeView from '../views/HomeView.vue'
 import ClassView from '../views/ClassView.vue'
 import OneClassView from '../views/OneClassView.vue'
+import EvaluationView from '../views/EvaluationView.vue'
+import OneEvaluationView from "../views/OneEvaluationView.vue";
 
 Vue.use(VueRouter)
 
@@ -21,6 +23,16 @@ const routes = [
     path: '/classroom/:id',
     name: 'ShowOneClassroom',
     component: OneClassView,
+  },
+  {
+    path: '/evaluations',
+    name: 'ShowEvaluations',
+    component: EvaluationView
+  },
+  {
+    path: '/evaluation/:id',
+    name: 'ShowOneEvaluation',
+    component: OneEvaluationView
   }
 ]
 
