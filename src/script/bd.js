@@ -81,7 +81,7 @@ export default {
             store.openCursor().onsuccess = e => {
                 let cursor = e.target.result;
                 if (cursor) {
-                    if (cursor.value.id_class === id_class) {
+                    if (parseInt(cursor.value.id_class) === parseInt(id_class)) {
                         students.push(cursor.value);
                     }
                     cursor.continue();

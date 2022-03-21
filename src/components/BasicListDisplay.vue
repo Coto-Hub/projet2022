@@ -1,12 +1,12 @@
 <template>
   <div v-if="ready">
-    <slot name="input_field" v-bind:mutable="mutableObject"></slot>
     <p>{{ warningMessage }}</p>
     <ul>
       <li v-for="element in elementList" :key="element.id">
         <slot name="element_display" v-bind:element="element"></slot>
       </li>
     </ul>
+    <slot name="input_field" v-bind:mutable="mutableObject"></slot>
   </div>
 </template>
 
