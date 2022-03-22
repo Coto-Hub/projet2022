@@ -25,61 +25,42 @@ export default {
     },
     async addClassToDb(db, classroom) {
         return new Promise((resolve) => {
+            let request = db.transaction(['classroom'],'readwrite')
+                .objectStore('classroom')
+                .add(classroom);
 
-            let trans = db.transaction(['classroom'],'readwrite');
-            trans.oncomplete = () => {
+            request.onsuccess = function() {
                 resolve();
             };
-
-            let store = trans.objectStore('classroom');
-            store.add(classroom);
-
         });
     },
     async deleteClassFromDb(db, id) {
         return new Promise((resolve) => {
-            let trans = db.transaction(['classroom'],'readwrite');
-            trans.oncomplete = () => {
+            let request = db.transaction(['classroom'],'readwrite')
+                .objectStore('classroom')
+                .delete(id);
+
+            request.onsuccess = function() {
                 resolve();
             };
-
-            let store = trans.objectStore('classroom');
-            store.delete(id);
         });
     },
     async getClassroomFromDb(db) {
         return new Promise((resolve) => {
-
-            let trans = db.transaction(['classroom'],'readonly');
-            trans.oncomplete = () => {
-                resolve(classrooms);
-            };
-
-            let store = trans.objectStore('classroom');
-            let classrooms = [];
-
-            store.openCursor().onsuccess = e => {
-                let cursor = e.target.result;
-                if (cursor) {
-                    classrooms.push(cursor.value)
-                    cursor.continue();
-                }
+            db.transaction(['classroom'],'readwrite')
+                .objectStore('classroom')
+                .getAll().onsuccess = function(event) {
+                resolve(event.target.result);
             };
         });
     },
     async getStudentOfClassFromDb(db, id_class) {
         return new Promise((resolve) => {
-
-            let trans = db.transaction(['student'],'readonly');
-            trans.oncomplete = () => {
-                resolve(students);
-            };
-
-            let store = trans.objectStore('student');
             let students = [];
-
-            store.openCursor().onsuccess = e => {
-                let cursor = e.target.result;
+            db.transaction(['student'],'readonly')
+                .objectStore('student')
+                .openCursor().onsuccess = function (event) {
+                let cursor = event.target.result;
                 if (cursor) {
                     if (parseInt(cursor.value.id_class) === parseInt(id_class)) {
                         students.push(cursor.value);
@@ -87,78 +68,81 @@ export default {
                     cursor.continue();
                 }
             };
+            resolve(students);
         });
     },
     async addStudentToDb(db, student) {
         return new Promise((resolve) => {
+            let request = db.transaction(['student'],'readwrite')
+                .objectStore('student')
+                .add(student);
 
-            let trans = db.transaction(['student'],'readwrite');
-            trans.oncomplete = () => {
+            request.onsuccess = function() {
                 resolve();
             };
+        });
+    },
+    async updateStudentToDb(db, student) {
+        return new Promise((resolve) => {
+            let objectStore = db.transaction(['student'],'readwrite')
+                .objectStore('student');
+            let request = objectStore.get(student.id_student);
 
-            let store = trans.objectStore('student');
-            store.add(student);
-
+            request.onsuccess = function() {
+                objectStore.put(student)
+                    .onsuccess = function() {
+                    resolve();
+                };
+            };
         });
     },
     async addEvalToDb(db, evaluation) {
         return new Promise((resolve) => {
+            let request = db.transaction(['evaluation'],'readwrite')
+                .objectStore('evaluation')
+                .add(evaluation);
 
-            let trans = db.transaction(['evaluation'],'readwrite');
-            trans.oncomplete = () => {
+            request.onsuccess = function() {
                 resolve();
             };
-
-            let store = trans.objectStore('evaluation');
-            store.add(evaluation);
-
         });
     },
     async deleteEvalFromDb(db, id) {
         return new Promise((resolve) => {
-            let trans = db.transaction(['evaluation'],'readwrite');
-            trans.oncomplete = () => {
+            let request = db.transaction(['evaluation'],'readwrite')
+                .objectStore('evaluation')
+                .delete(id);
+
+            request.onsuccess = function() {
                 resolve();
             };
-
-            let store = trans.objectStore('evaluation');
-            store.delete(id);
         });
     },
     async getEvaluationFromDb(db) {
         return new Promise((resolve) => {
-
-            let trans = db.transaction(['evaluation'],'readonly');
-            trans.oncomplete = () => {
-                resolve(evaluations);
-            };
-
-            let store = trans.objectStore('evaluation');
             let evaluations = [];
-
-            store.openCursor().onsuccess = e => {
+            let request = db.transaction(['evaluation'],'readonly')
+                .objectStore('evaluation')
+                .openCursor().onsuccess = e => {
                 let cursor = e.target.result;
                 if (cursor) {
                     evaluations.push(cursor.value)
                     cursor.continue();
                 }
             };
+
+            request.onsuccess = function() {
+                resolve(evaluations);
+            };
         });
     },
     getCriteriasFromDb(db, id_eval) {
         return new Promise((resolve) => {
-
-            let trans = db.transaction(['criteria'],'readonly');
-            trans.oncomplete = () => {
-                resolve(criterias);
-            };
-
-            let store = trans.objectStore('criteria');
             let criterias = [];
-
-            store.openCursor().onsuccess = e => {
-                let cursor = e.target.result;
+            let request = db.transaction(['student'],'readonly')
+                .objectStore('student')
+                .openCursor().onsuccess = function (event) {
+                let cursor = event.target.result;
                 if (cursor) {
                     if (parseInt(cursor.value.id_eval) === parseInt(id_eval)) {
                         criterias.push(cursor.value);
@@ -166,19 +150,21 @@ export default {
                     cursor.continue();
                 }
             };
+            request.onsuccess = function() {
+                resolve(criterias);
+            };
         });
     },
     addCriteriaToDb(db, criteria) {
         return new Promise((resolve) => {
 
-            let trans = db.transaction(['criteria'],'readwrite');
-            trans.oncomplete = () => {
+            let request = db.transaction(['criteria'],'readwrite')
+                .objectStore('criteria')
+                .add(criteria);
+
+            request.onsuccess = function() {
                 resolve();
             };
-
-            let store = trans.objectStore('criteria');
-            store.add(criteria);
-
         });
     }
 }
