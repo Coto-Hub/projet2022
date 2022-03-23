@@ -1,6 +1,6 @@
 <template>
   <MainDisplay app-title="Evaluations">
-    <div id="app">
+    <div class="container" id="app">
       <nav>
         <router-link to="/">Home</router-link> |
         <router-link to="/classrooms">Classes</router-link> |

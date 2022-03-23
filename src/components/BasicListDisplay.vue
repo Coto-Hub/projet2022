@@ -1,18 +1,22 @@
 <template>
-  <div v-if="ready">
-    <p>{{ warningMessage }}</p>
-    <ul>
-      <li v-for="element in elementList" :key="element.id">
+  <div class="basicListDisplay" v-if="ready">
+    <div>
+      <slot name="element_display" v-bind:mutable="mutableObjectUpdate"></slot>
+    </div>
+    <ul class="list">
+      <li class="listItem" v-for="element in elementList" :key="element.id">
         <div v-if="element.updated">
           <slot name="element_update_display" v-bind:element="element"></slot>
         </div>
         <div v-else>
           <slot name="element_show_display" v-bind:element="element"></slot>
         </div>
-        <slot name="element_display" v-bind:element="element"></slot>
       </li>
     </ul>
-    <slot name="input_field" v-bind:mutable="mutableObject"></slot>
+    <div class="add display-input">
+      <slot name="input_field" v-bind:mutable="mutableObjectAdd"></slot>
+      <p class="warning">{{ warningMessage }}</p>
+    </div>
   </div>
 </template>
 
@@ -22,12 +26,13 @@ export default {
   props: {
     ready: Boolean,
     elementList: Array,
-    mutableObject: Object,
+    mutableObjectAdd: Object,
+    mutableObjectUpdate: Object,
     messageDisplayCondition: Boolean,
   },
   computed : {
     warningMessage: function () {
-      return this.messageDisplayCondition ? "" : "Veuillez remplir le champ"
+      return this.messageDisplayCondition ? "" : "Veuillez remplir le(s) champ(s)"
     }
   },
   methods : {}

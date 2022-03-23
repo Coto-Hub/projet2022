@@ -54,6 +54,30 @@ export default {
             };
         });
     },
+    async getClassNameFromDb(db, id_class) {
+        return new Promise((resolve) => {
+            db.transaction(['classroom'],'readwrite')
+                .objectStore('classroom')
+                .get(id_class)
+                .onsuccess = function(event) {
+                resolve(event.target.result.name);
+            };
+        });
+    },
+    async updateClassToDb(db, classroom) {
+        return new Promise((resolve) => {
+            let objectStore = db.transaction(['classroom'],'readwrite')
+                .objectStore('classroom');
+            let request = objectStore.get(classroom.id_class);
+
+            request.onsuccess = function() {
+                objectStore.put(classroom)
+                    .onsuccess = function() {
+                    resolve();
+                };
+            };
+        });
+    },
     async getStudentOfClassFromDb(db, id_class) {
         return new Promise((resolve) => {
             let students = [];
@@ -94,6 +118,15 @@ export default {
                     resolve();
                 };
             };
+        });
+    },
+    async deleteStudentToDb(db, student) {
+        return new Promise((resolve) => {
+            db.transaction(['student'],'readwrite')
+                .objectStore('student')
+                .delete(student.id_student);
+
+            resolve();
         });
     },
     async addEvalToDb(db, evaluation) {

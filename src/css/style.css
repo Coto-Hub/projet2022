@@ -1,2 +1,77 @@
-html {
+ul, li {
+    margin:0;
+    padding: 0;
+    text-indent: 0;
+    list-style-type: unset;
+}
+.container {
+    display: block;
+    margin: auto;
+    width: 80%;
+    max-width: 800px;
+}
+.basicListDisplay {
+    margin: 2rem 1rem;
+}
+.add {
+    width: 50%;
+    margin: auto;
+    padding-top: 1rem;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+}
+.add .warning {
+    width: 100%;
+    text-align: center;
+}
+.list {
+    border: 1px solid black;
+    width: 50%;
+    margin: auto;
+    position: relative;
+    padding-top: 0.5rem;
+    padding-bottom: 50%;
+}
+.listItem {
+    display: inline;
+}
+.listItem > div {
+    display: flex;
+    padding: 0.5rem 1rem;
+}
+.listItemLeft {
+    width: 80%;
+    display: flex;
+    justify-content: space-between;
+}
+.display-input input, button {
+    width: 45%;
+    margin: auto;
+}
+.mt-4 {
+    margin-top: 1rem;
+}
+.headearList {
+    margin: 1rem auto;
+    width: 20%;
+    display: flex;
+    justify-content: space-between;
+}
+.headearList input {
+    width: 80%;
+}
+.headearList svg {
+    vertical-align: middle;
+}
+.listItemRight {
+    width: 20%;
+    display: flex;
+    justify-content: flex-end;
+}
+.listItemRight a {
+    margin-right: 0.5rem;
+}
+.listItemRight a svg {
+    vertical-align: middle;
 }
