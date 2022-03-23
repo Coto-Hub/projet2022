@@ -1,5 +1,5 @@
 <template>
-  <BasicListDisplay :element-list="classrooms" :ready="ready" :mutable-object-add="studentToAdd" :message-display-condition="showCondition">
+  <BasicListDisplay v-bind:title="title" :element-list="classrooms" :ready="ready" :mutable-object-add="studentToAdd" :message-display-condition="showCondition">
     <template v-slot:element_show_display="slotProps">
       <div class="listItemLeft">
         {{slotProps.element.name }}
@@ -26,6 +26,7 @@ export default {
   props: {},
   data: function () {
     return {
+      title: "Gestion des groupes",
       db: null,
       ready:false,
       addDisabled:false,

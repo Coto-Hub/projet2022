@@ -34,11 +34,22 @@ export default {
             };
         });
     },
-    async deleteClassFromDb(db, id) {
+    async deleteClassFromDb(db, id_class) {
         return new Promise((resolve) => {
+            let objectStore = db.transaction(['student'],'readwrite')
+                .objectStore('student');
+            objectStore.openCursor().onsuccess = function (event) {
+                let cursor = event.target.result;
+                if (cursor) {
+                    if (parseInt(cursor.value.id_class) === parseInt(id_class)) {
+                        objectStore.delete(cursor.value.id_student);
+                    }
+                    cursor.continue();
+                }
+            };
             let request = db.transaction(['classroom'],'readwrite')
                 .objectStore('classroom')
-                .delete(id);
+                .delete(id_class);
 
             request.onsuccess = function() {
                 resolve();

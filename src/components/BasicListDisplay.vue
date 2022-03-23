@@ -1,5 +1,6 @@
 <template>
   <div class="basicListDisplay" v-if="ready">
+    <h1>{{ title }}</h1>
     <div>
       <slot name="element_display" v-bind:mutable="mutableObjectUpdate"></slot>
     </div>
@@ -26,6 +27,7 @@ export default {
   props: {
     ready: Boolean,
     elementList: Array,
+    title: String,
     mutableObjectAdd: Object,
     mutableObjectUpdate: Object,
     messageDisplayCondition: Boolean,
@@ -38,7 +40,3 @@ export default {
   methods : {}
 }
 </script>
-
-<style scoped>
-
-</style>
