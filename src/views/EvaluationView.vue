@@ -11,6 +11,16 @@
     <template v-slot:input_field="slotProps">
       <input type="text" v-model="slotProps.mutable.name" /> <button @click="addEvaluation" :disabled="addDisabled">Ajouter</button>
     </template>
+    <template v-slot:element_update_display="slotProps">
+      <div class="listItemLeft display-input">
+        <input type="text" v-model="slotProps.element.firstname" />
+        <input type="text" v-model="slotProps.element.lastname" />
+      </div>
+      <div class="listItemRight">
+        <a class="check" @click="updateCriteria(slotProps.element)" ><font-awesome-icon icon="fa-solid fa-circle-check" /></a>
+        <a class="delete" @click="deleteCriteria(slotProps.element)"><font-awesome-icon icon="fa-solid fa-trash" /></a>
+      </div>
+    </template>
   </BasicListDisplay>
 </template>
 

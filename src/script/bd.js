@@ -163,8 +163,8 @@ export default {
     getCriteriasFromDb(db, id_eval) {
         return new Promise((resolve) => {
             let criterias = [];
-            let request = db.transaction(['student'],'readonly')
-                .objectStore('student')
+            db.transaction(['criteria'],'readonly')
+                .objectStore('criteria')
                 .openCursor().onsuccess = function (event) {
                 let cursor = event.target.result;
                 if (cursor) {
@@ -174,9 +174,7 @@ export default {
                     cursor.continue();
                 }
             };
-            request.onsuccess = function() {
-                resolve(criterias);
-            };
+            resolve(criterias);
         });
     },
     addCriteriaToDb(db, criteria) {
@@ -190,5 +188,28 @@ export default {
                 resolve();
             };
         });
-    }
+    },
+    async updateCriteriaToDb(db, criteria) {
+        return new Promise((resolve) => {
+            let objectStore = db.transaction(['criteria'],'readwrite')
+                .objectStore('criteria');
+            let request = objectStore.get(criteria.id_crit);
+
+            request.onsuccess = function() {
+                objectStore.put(criteria)
+                    .onsuccess = function() {
+                    resolve();
+                };
+            };
+        });
+    },
+    async deleteCriteriaToDb(db, criteria) {
+        return new Promise((resolve) => {
+            db.transaction(['criteria'],'readwrite')
+                .objectStore('criteria')
+                .delete(criteria.id_crit);
+
+            resolve();
+        });
+    },
 }
