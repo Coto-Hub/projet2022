@@ -31,7 +31,8 @@ ul, li {
     margin: auto;
     position: relative;
     padding-top: 0.5rem;
-    padding-bottom: 50%;
+    height: 24rem;
+    overflow-y: scroll;
 }
 .listItem {
     display: inline;
@@ -52,16 +53,30 @@ ul, li {
 .mt-4 {
     margin-top: 1rem;
 }
-.headearList {
+.headerList {
     margin: 1rem auto;
-    width: 20%;
+    width: 50%;
     display: flex;
     justify-content: space-between;
 }
-.headearList input {
+.headerList .headerLeft, .headerList .headerRight {
+    margin: 1rem auto;
+    width: 40%;
+    display: flex;
+}
+.headerList .headerLeft {
+    justify-content: space-between;
+}
+.headerList .headerRight {
+    justify-content: flex-end;
+}
+.headerList .headerRight a {
+    margin-right: 0.5rem;
+}
+.headerList input {
     width: 80%;
 }
-.headearList svg {
+.headerList svg {
     vertical-align: middle;
 }
 .listItemRight {

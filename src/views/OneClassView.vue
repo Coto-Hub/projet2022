@@ -1,8 +1,14 @@
 <template>
   <BasicListDisplay :element-list="students" :ready="ready" :mutable-object-add="studentToAdd" :mutable-object-update="nameToUpdate" :message-display-condition="showCondition">
     <template v-slot:element_display="slotProps">
-      <div class="headearList">
-        <input type="text" v-model="slotProps.mutable.name" /><a class="check" v-if="showUpdateClassName" @click="updateClassName" ><font-awesome-icon icon="fa-solid fa-circle-check" /></a>
+      <div class="headerList">
+        <div class="headerLeft">
+          <input type="text" v-model="slotProps.mutable.name" /><a class="check" v-if="showUpdateClassName" @click="updateClassName" ><font-awesome-icon icon="fa-solid fa-circle-check" /></a>
+        </div>
+        <div class="headerRight">
+          <a class="upload"><font-awesome-icon icon="fa-solid fa-upload" /></a>
+          <a class="delete"><font-awesome-icon icon="fa-solid fa-trash" /></a>
+        </div>
       </div>
     </template>
     <template v-slot:element_update_display="slotProps">
@@ -24,7 +30,7 @@
       </div>
     </template>
     <template v-slot:input_field="slotProps">
-      <input type="text" v-model="slotProps.mutable.firstname" /> <input type="text" v-model="slotProps.mutable.lastname" /> <button class="mt-4" @click="addStudent" :disabled="addDisabled">Ajouter</button>
+      <input placeholder="Prénom" type="text" v-model="slotProps.mutable.firstname" /> <input placeholder="Nom" type="text" v-model="slotProps.mutable.lastname" /> <button class="mt-4" @click="addStudent" :disabled="addDisabled">Ajouter</button>
     </template>
   </BasicListDisplay>
 </template>
@@ -66,13 +72,16 @@ export default {
   },
   async created() {
     this.db = await bd.getDb();
-    this.id = this.$route.params.id;
+    this.id = parseInt(this.$route.params.id);
     this.students = await bd.getStudentOfClassFromDb(this.db, this.id);
     this.nameToUpdate.name = await bd.getClassNameFromDb(this.db, this.id);
     this.defaultName = this.nameToUpdate.name;
     this.ready = true;
   },
   methods: {
+    previewFiles(event) {
+      console.log(event.target.files);
+    },
     toggleUpdateStudent(element) {
       let index = this.students.indexOf(element);
       if (index >= 0) {

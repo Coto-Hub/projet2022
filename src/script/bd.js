@@ -153,19 +153,10 @@ export default {
     },
     async getEvaluationFromDb(db) {
         return new Promise((resolve) => {
-            let evaluations = [];
-            let request = db.transaction(['evaluation'],'readonly')
+            db.transaction(['evaluation'],'readwrite')
                 .objectStore('evaluation')
-                .openCursor().onsuccess = e => {
-                let cursor = e.target.result;
-                if (cursor) {
-                    evaluations.push(cursor.value)
-                    cursor.continue();
-                }
-            };
-
-            request.onsuccess = function() {
-                resolve(evaluations);
+                .getAll().onsuccess = function(event) {
+                resolve(event.target.result);
             };
         });
     },

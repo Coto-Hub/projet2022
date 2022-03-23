@@ -1,18 +1,24 @@
 <template>
-    <BasicListDisplay :element-list="evaluations" :ready="ready" :mutable-object="evaluationToAdd" :message-display-condition="bool">
-      <template v-slot:input_field="slotProps">
-        <input type="text" v-model="slotProps.mutable.name" /> <button @click="addEvaluation" :disabled="addDisabled">Add Evaluation</button>
-      </template>
-      <template v-slot:element_display="slotProps">
-        {{slotProps.element.name}} <router-link :to="{ name: 'ShowOneEvaluation', params: { id: slotProps.element.id_eval }}">Update</router-link>
-      </template>
-    </BasicListDisplay>
+  <BasicListDisplay :element-list="evaluations" :ready="ready" :mutable-object-add="evaluationToAdd" :message-display-condition="showCondition">
+    <template v-slot:element_show_display="slotProps">
+      <div class="listItemLeft">
+        {{slotProps.element.name }}
+      </div>
+      <div class="listItemRight">
+        <router-link :to="{ name: 'ShowOneEvaluation', params: { id: slotProps.element.id_eval }}"><font-awesome-icon icon="fa-solid fa-pencil" /></router-link>
+      </div>
+    </template>
+    <template v-slot:input_field="slotProps">
+      <input type="text" v-model="slotProps.mutable.name" /> <button @click="addEvaluation" :disabled="addDisabled">Ajouter</button>
+    </template>
+  </BasicListDisplay>
 </template>
 
 <script>
 
 import bd from '../script/bd'
 import BasicListDisplay from "@/components/BasicListDisplay";
+
 export default {
   name: "EvaluationView",
   components: {BasicListDisplay},
@@ -29,7 +35,7 @@ export default {
     }
   },
   computed: {
-    bool: function() {
+    showCondition: function() {
       return this.evaluationToAdd.name !== ""
     }
   },

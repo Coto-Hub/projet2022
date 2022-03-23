@@ -9,7 +9,7 @@
       </div>
     </template>
     <template v-slot:input_field="slotProps">
-      <input type="text" v-model="slotProps.mutable.name" /> <button @click="addClass" :disabled="addDisabled">Ajouter</button>
+      <input placeholder="Nom du groupe" type="text" v-model="slotProps.mutable.name" /> <button @click="addClass" :disabled="addDisabled">Ajouter</button>
     </template>
   </BasicListDisplay>
 </template>
@@ -48,7 +48,6 @@ export default {
   methods: {
     async addClass() {
       this.addDisabled = true;
-      // random cat for now
       let classroom = {
         name: this.studentToAdd.name,
       };
