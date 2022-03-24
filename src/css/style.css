@@ -21,8 +21,7 @@ ul, li {
 .container {
     display: block;
     margin: auto;
-    width: 80%;
-    max-width: 800px;
+    width: 100%;
 }
 h1 {
     text-align: center;
@@ -34,7 +33,7 @@ h1 {
     border-radius: 1rem;
 }
 .add {
-    width: 50%;
+    width: 90%;
     margin: auto;
     padding-top: 1rem;
     display: flex;
@@ -47,7 +46,7 @@ h1 {
 }
 .list {
     border: 1px solid black;
-    width: 50%;
+    width: 90%;
     margin: auto;
     position: relative;
     padding-top: 0.5rem;
@@ -177,4 +176,13 @@ button:hover {
 .cancel-button {
     background-color: white;
     color: black;
+}
+@media only screen and (min-width: 900px) {
+    .container {
+        width: 80%;
+        max-width: 800px;
+    }
+    .list, .add {
+        width: 50%;
+    }
 }
