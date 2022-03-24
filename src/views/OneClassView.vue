@@ -4,7 +4,9 @@
       <template v-slot:element_display="slotProps">
         <div class="headerList">
           <div class="headerLeft">
-            <input type="text" v-model="slotProps.mutable.name" /><a class="check" v-if="showUpdateClassName" @click="updateClassName" ><font-awesome-icon icon="fa-solid fa-circle-check" /></a>
+            <input type="text" v-model="slotProps.mutable.name" />
+            <a class="check" v-if="showUpdateClassName" @click="updateClassName" ><font-awesome-icon icon="fa-solid fa-circle-check" /></a>
+            <a class="check disabled" v-else><font-awesome-icon icon="fa-solid fa-circle-check" /></a>
           </div>
           <div class="headerRight">
             <a @click="showImport = true" class="upload"><font-awesome-icon icon="fa-solid fa-upload" /></a>
@@ -31,7 +33,9 @@
         </div>
       </template>
       <template v-slot:input_field="slotProps">
-        <input placeholder="Prénom" type="text" v-model="slotProps.mutable.firstname" /> <input placeholder="Nom" type="text" v-model="slotProps.mutable.lastname" /> <button class="mt-4" @click="addStudent" :disabled="addDisabled">Ajouter</button>
+        <input placeholder="Prénom" type="text" v-model="slotProps.mutable.firstname" />
+        <input placeholder="Nom" type="text" v-model="slotProps.mutable.lastname" />
+        <button class="mt-4 btn add-button" @click="addStudent" :disabled="addDisabled">Ajouter</button>
       </template>
     </BasicListDisplay>
     <BasicAlertDisplay :ready="ready" v-if="showAlert" :is-little="true">
@@ -40,8 +44,8 @@
         <p>Voulez-vous vraiment supprimer ce groupe ?</p>
       </template>
       <template v-slot:input_field>
-        <button @click="deleteClass" class="delete-button" :disabled="deleteDisabled">Supprimer</button>
-        <button @click="showAlert = false" class="cancel-button" :disabled="cancelDisabled">Annuler</button>
+        <button @click="deleteClass" class="btn delete-button" :disabled="deleteDisabled">Supprimer</button>
+        <button @click="showAlert = false" class="btn cancel-button" :disabled="cancelDisabled">Annuler</button>
       </template>
     </BasicAlertDisplay>
     <BasicAlertDisplay :ready="ready" v-if="showImport" :message="'Veuillez renseigner un fichier .cvs'" :show-message="showError" :is-little="false">
@@ -51,8 +55,8 @@
         <input ref="file" type="file">
       </template>
       <template v-slot:input_field>
-        <button @click="importStudent" class="add-button" :disabled="deleteDisabled">Ajouter</button>
-        <button @click="showImport = false" class="cancel-button" :disabled="cancelDisabled">Annuler</button>
+        <button @click="importStudent" class="btn add-button" :disabled="deleteDisabled">Ajouter</button>
+        <button @click="showImport = false" class="btn cancel-button" :disabled="cancelDisabled">Annuler</button>
       </template>
     </BasicAlertDisplay>
   </div>
@@ -110,9 +114,6 @@ export default {
     this.ready = true;
   },
   methods: {
-    previewFiles(event) {
-      console.log(event.target.files);
-    },
     toggleUpdateStudent(element) {
       let index = this.students.indexOf(element);
       if (index >= 0) {

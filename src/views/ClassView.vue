@@ -9,7 +9,8 @@
       </div>
     </template>
     <template v-slot:input_field="slotProps">
-      <input placeholder="Nom du groupe" type="text" v-model="slotProps.mutable.name" /> <button @click="addClass" :disabled="addDisabled">Ajouter</button>
+      <input placeholder="Nom du groupe" type="text" v-model="slotProps.mutable.name" />
+      <button @click="addClass" :disabled="addDisabled" class="btn add-button">Ajouter</button>
     </template>
   </BasicListDisplay>
 </template>

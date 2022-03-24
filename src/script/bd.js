@@ -151,11 +151,36 @@ export default {
             };
         });
     },
-    async deleteEvalFromDb(db, id) {
+    async updateEvalToDb(db, evaluation) {
         return new Promise((resolve) => {
+            let objectStore = db.transaction(['evaluation'],'readwrite')
+                .objectStore('evaluation');
+            let request = objectStore.get(evaluation.id_eval);
+
+            request.onsuccess = function() {
+                objectStore.put(evaluation)
+                    .onsuccess = function() {
+                    resolve();
+                };
+            };
+        });
+    },
+    async deleteEvalFromDb(db, id_eval) {
+        return new Promise((resolve) => {
+            let objectStore = db.transaction(['criteria'],'readwrite')
+                .objectStore('criteria');
+            objectStore.openCursor().onsuccess = function (event) {
+                let cursor = event.target.result;
+                if (cursor) {
+                    if (parseInt(cursor.value.id_eval) === parseInt(id_eval)) {
+                        objectStore.delete(cursor.value.id_crit);
+                    }
+                    cursor.continue();
+                }
+            };
             let request = db.transaction(['evaluation'],'readwrite')
                 .objectStore('evaluation')
-                .delete(id);
+                .delete(id_eval);
 
             request.onsuccess = function() {
                 resolve();
@@ -168,6 +193,16 @@ export default {
                 .objectStore('evaluation')
                 .getAll().onsuccess = function(event) {
                 resolve(event.target.result);
+            };
+        });
+    },
+    async getEvaluationNameFromDb(db, id_eval) {
+        return new Promise((resolve) => {
+            db.transaction(['evaluation'],'readwrite')
+                .objectStore('evaluation')
+                .get(id_eval)
+                .onsuccess = function(event) {
+                resolve(event.target.result.name);
             };
         });
     },

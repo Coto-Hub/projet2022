@@ -7,6 +7,9 @@ html, body {
     color: crimson;
     font-weight: 700;
 }
+.disabled {
+    color: grey;
+}
 html {
     background-image: linear-gradient(to left bottom,#b3d7ff 0,#b3ffec);
     background-repeat: no-repeat;
@@ -74,17 +77,21 @@ h1 {
 }
 .headerList {
     margin: 1rem auto;
-    width: 50%;
+    width: 90%;
     display: flex;
     justify-content: space-between;
 }
 .headerList .headerLeft, .headerList .headerRight {
     margin: 1rem auto;
-    width: 40%;
+    width: 45%;
     display: flex;
 }
 .headerList .headerLeft {
-    justify-content: space-between;
+    justify-content: space-around;
+    justify-items: center;
+}
+.headerList .headerLeft a svg {
+    vertical-align: bottom;
 }
 .headerList .headerRight {
     justify-content: flex-end;
@@ -93,7 +100,7 @@ h1 {
     margin-right: 0.5rem;
 }
 .headerList input {
-    width: 80%;
+    width: 60%;
 }
 .headerList svg {
     vertical-align: middle;
@@ -153,7 +160,7 @@ h1 {
 .basicAlertDisplay .alertBox .headerBox input {
     margin: 0.5rem auto 0 auto;
 }
-.basicAlertDisplay .alertBox .footerBox button {
+.btn {
     width: auto;
     padding: 0.5rem 1rem;
     font-weight: 700;
@@ -182,7 +189,8 @@ button:hover {
         width: 80%;
         max-width: 800px;
     }
-    .list, .add {
+    .list, .add, .headerList {
         width: 50%;
     }
+
 }
