@@ -5,6 +5,7 @@ import ClassView from '../views/ClassView.vue'
 import OneClassView from '../views/OneClassView.vue'
 import EvaluationView from '../views/EvaluationView.vue'
 import OneEvaluationView from "../views/OneEvaluationView.vue";
+import RateView from "../views/RateView.vue";
 
 Vue.use(VueRouter)
 
@@ -33,6 +34,11 @@ const routes = [
     path: '/evaluation/:id',
     name: 'ShowOneEvaluation',
     component: OneEvaluationView
+  },
+  {
+    path: '/rate',
+    name: 'Rate',
+    component: RateView
   }
 ]
 

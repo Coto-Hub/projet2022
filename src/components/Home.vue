@@ -1,5 +1,6 @@
 <template>
   <div class="home">
+    <router-link class="big-btn" :to="{ name: 'Rate'}">Evaluer</router-link>
   </div>
 </template>
 

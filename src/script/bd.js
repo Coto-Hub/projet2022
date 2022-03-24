@@ -20,6 +20,8 @@ export default {
                 db.createObjectStore("evaluation", { autoIncrement: true, keyPath:'id_eval' });
                 db.createObjectStore("student", { autoIncrement: true, keyPath:'id_student' });
                 db.createObjectStore("criteria", { autoIncrement: true, keyPath:'id_crit' });
+                db.createObjectStore("rating", { autoIncrement: true, keyPath:'id_rat' });
+                db.createObjectStore("currently_rating", { autoIncrement: true, keyPath:'id_curr' });
             };
         });
     },
@@ -258,4 +260,26 @@ export default {
             resolve();
         });
     },
+    async getCurrentlyRatingFromDb(db) {
+        return new Promise((resolve) => {
+            db.transaction(['currently_rating'],'readwrite')
+                .objectStore('currently_rating')
+                .getAll().onsuccess = function(event) {
+                resolve(event.target.result);
+            };
+        });
+    },
+
+    async addCurrentlyRatedtToDb(db, currentlyRated) {
+        return new Promise((resolve) => {
+
+            let request = db.transaction(['currently_rating'],'readwrite')
+                .objectStore('currently_rating')
+                .add(currentlyRated);
+
+            request.onsuccess = function() {
+                resolve();
+            };
+        });
+    }
 }

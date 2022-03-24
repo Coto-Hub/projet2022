@@ -139,6 +139,9 @@ export default {
             for (const ligne of lignes) {
               let values = ligne.trim().split(";");
               console.log(values);
+              if (values.length < 2) {
+                values = ligne.trim().split(",")
+              }
               if (values.length === 2) {
                 let student = {
                   id_class: id,
