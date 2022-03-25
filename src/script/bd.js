@@ -281,5 +281,14 @@ export default {
                 resolve();
             };
         });
-    }
+    },
+    async deleteCurrentlyRatingToDb(db, currently_rating) {
+        return new Promise((resolve) => {
+            db.transaction(['currently_rating'],'readwrite')
+                .objectStore('currently_rating')
+                .delete(currently_rating.id_curr);
+
+            resolve();
+        });
+    },
 }

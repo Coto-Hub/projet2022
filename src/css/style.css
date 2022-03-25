@@ -7,6 +7,19 @@ html, body {
     color: crimson;
     font-weight: 700;
 }
+
+.noRate {
+    color: red;
+}
+
+.rate {
+    color: green
+}
+.rating_quick_view {
+    border-collapse: collapse;
+    text-align: center;
+}
+
 .disabled {
     color: grey;
 }
@@ -92,6 +105,9 @@ h1 {
 }
 .headerList .headerLeft a svg {
     vertical-align: bottom;
+}
+.rating_quick_view tr td, .rating_quick_view tr th {
+    border: 1px solid black;
 }
 .headerList .headerRight {
     justify-content: flex-end;
@@ -184,6 +200,19 @@ button:hover {
     background-color: white;
     color: black;
 }
+
+.oneLine {
+    width: 100%;
+    height: 40px;
+    display: flex;
+    align-items: center;
+}
+
+.oneLine:hover {
+    background-color: rgba(0,255,0,0.5);
+    cursor: pointer;
+}
+
 @media only screen and (min-width: 900px) {
     .container {
         width: 80%;

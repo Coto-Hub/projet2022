@@ -4,14 +4,37 @@
       <h2>
         Entrain de noter le groupe "{{ groupName }}" sur l'évaluation "{{ evalName }}"
       </h2>
-      <!-- TODO: Permettre de changer le couple groupe-evaluation (en le suprimant, pas d'update) -->
-      <BasicListDisplay :element-list="students" :ready="ready" :message-display-condition="true">
+      <button @click="deleteCurrentlyRating">Changer de groupe et/ou d'évaluation</button>
+      <BasicAlertDisplay :ready="ready" v-if="showAlert">
+        <template v-slot:element_display>
+          <h1>Entrain d'évaluer XX XX</h1>
+          <label v-for="crit in criterias" :key="crit.id"> {{ crit.name_crit }} <input type="range" min="0" max="100"></label>
+        </template>
+        <template v-slot:input_field>
+          <button class="btn add-button">Valider</button>
+          <button @click="showAlert = false" class="btn cancel-button">Annuler</button>
+        </template>
+      </BasicAlertDisplay>
+      <BasicListDisplay :element-list="students" :ready="ready" :message-display-condition="true" v-else>
         <template v-slot:element_show_display="slotProps">
-          <div class="listItemLeft">
-            {{slotProps.element.firstname }} {{ slotProps.element.lastname }}
-          </div>
-          <div class="listItemRight">
-            <!-- TODO: tableaux avec les critères (autre élément?) -->
+          <div class="oneLine" @click="rateStudent(slotProps.element.id_student)">
+            <div class="listItemLeft">
+              {{slotProps.element.firstname }} {{ slotProps.element.lastname }}
+            </div>
+            <div class="listItemRight">
+              <table class="rating_quick_view">
+                <tr>
+                  <th v-for="crit in criterias" :key="crit.id">
+                    {{ crit.name_crit }}
+                  </th>
+                </tr>
+                <tr>
+                  <td v-for="crit in criterias" :key="crit.id">
+                    50% <!-- TODO: ne pas mettre en dur -->
+                  </td>
+                </tr>
+              </table>
+            </div>
           </div>
         </template>
       </BasicListDisplay>
@@ -34,10 +57,11 @@
 <script>
 import bd from "@/script/bd";
 import BasicListDisplay from "@/components/BasicListDisplay";
+import BasicAlertDisplay from "@/components/BasicAlertDisplay";
 
 export default {
   name: "RateView",
-  components: {BasicListDisplay},
+  components: {BasicAlertDisplay, BasicListDisplay},
   data: function () {
     return {
       db: null,
@@ -52,6 +76,7 @@ export default {
       groupName: "",
       students: [],
       criterias: [],
+      showAlert: false,
     }
   },
   async created() {
@@ -70,6 +95,10 @@ export default {
     this.ready = true;
   },
   methods: {
+    rateStudent: function (id_student) {
+      console.log(id_student)
+      this.showAlert = true;
+    },
     addCurrentlyRating: async function () {
       if(this.selectedEval !== "" && this.selectedGroup !== "") {
         this.addDisabled = true;
@@ -80,8 +109,18 @@ export default {
         console.log('about to add '+JSON.stringify(currentlyRated));
         await bd.addCurrentlyRatedtToDb(this.db, currentlyRated);
         this.currently_rating = await bd.getCurrentlyRatingFromDb(this.db, this.id);
+        this.evalName = await bd.getEvaluationNameFromDb(this.db, this.currently_rating[0].id_eval)
+        this.groupName = await bd.getClassNameFromDb(this.db, this.currently_rating[0].id_class)
+        this.students = await bd.getStudentOfClassFromDb(this.db, this.currently_rating[0].id_class)
+        this.criterias = await bd.getCriteriasFromDb(this.db, this.currently_rating[0].id_eval)
         this.addDisabled = false;
       }
+    },
+    deleteCurrentlyRating: async function() {
+      await bd.deleteCurrentlyRatingToDb(this.db, this.currently_rating[0])
+      this.currently_rating = await bd.getCurrentlyRatingFromDb(this.db, this.id);
+      this.evaluations = await bd.getEvaluationFromDb(this.db);
+      this.groups = await bd.getClassroomFromDb(this.db);
     }
   }
 }
