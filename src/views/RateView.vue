@@ -3,6 +3,7 @@
     <div  v-if="currently_rating[0] != null">
       <BasicListDisplay :element-list="students" :ready="ready" :message-display-condition="true" :title="title" :element-list-left="'Élève'" :element-list-right="'Moyenne'">
         <template v-slot:element_display>
+          <button type="button" @click="createAndDownloadCsv">Télécharger la liste en CSV</button>
           <div class="headerList">
             <div class="headerCenter">
               <button class="btn" @click="deleteCurrentlyRating">Changer de groupe et/ou d'évaluation</button>
@@ -338,6 +339,37 @@ export default {
       this.currently_rating = await bd.getCurrentlyRatingFromDb(this.db, this.id);
       this.evaluations = await bd.getEvaluationFromDb(this.db);
       this.groups = await bd.getClassroomFromDb(this.db);
+    },
+    createAndDownloadCsv: async function () {
+      // On génère les datas pour le csv
+      let csvData = [];
+      csvData.push([this.evalName]);
+      let colNames = ["Nom", "Prenom"];
+      for (let criteria of this.criterias) {
+        colNames.push(criteria.name_crit);
+      }
+      csvData.push(colNames);
+      for (let student of this.students) {
+        let studentData = [student.lastname, student.firstname];
+        for (let criteria of this.criterias) {
+          let rating = await bd.getRatingOfStudentFromDb(this.db, student.id_student, criteria.id_crit);
+          studentData.push(rating[0].score);
+        }
+        csvData.push(studentData)
+      }
+
+
+      let csv = "";
+      csvData.forEach(function (data) {
+        csv += data.join(';');
+        csv += '\n';
+      })
+
+      let hiddenElement = document.createElement('a');
+      hiddenElement.href = 'data:text/csv;charset=utf-8,' + encodeURI(csv);
+      hiddenElement.target = '_blank';
+      hiddenElement.download = 'Notes.csv';
+      hiddenElement.click();
     }
   }
 }
