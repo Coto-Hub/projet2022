@@ -1,5 +1,5 @@
 <template>
-  <BasicListDisplay v-bind:title="title" :element-list="evaluations" :ready="ready" :mutable-object-add="evaluationToAdd" :message-display-condition="showCondition">
+  <BasicListDisplay v-bind:title="title" :element-list="evaluations" :ready="ready" :mutable-object-add="evaluationToAdd" :message-display-condition="showCondition" :element-list-left="'Nom de l\'évaluation'" :element-list-right="'Intéraction'">
     <template v-slot:element_show_display="slotProps">
       <div class="listItemLeft">
         {{slotProps.element.name }}

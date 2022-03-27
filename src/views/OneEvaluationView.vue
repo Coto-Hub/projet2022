@@ -1,6 +1,6 @@
 <template>
   <div>
-    <BasicListDisplay :element-list="criterias" :ready="ready" :mutable-object-add="criteriaToAdd" :title="title" :mutable-object-update="nameToUpdate" :message-display-condition="showCondition">
+    <BasicListDisplay :element-list="criterias" :ready="ready" :mutable-object-add="criteriaToAdd" :title="title" :mutable-object-update="nameToUpdate" :message-display-condition="showCondition" :element-list-left="'Nom du critére'" :element-list-right="'Intéraction'">
       <template v-slot:element_display="slotProps">
         <div class="headerList">
           <div class="headerLeft">

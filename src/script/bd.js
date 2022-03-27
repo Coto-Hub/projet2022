@@ -104,8 +104,20 @@ export default {
                     }
                     cursor.continue();
                 }
+                else {
+                    resolve(students);
+                }
             };
-            resolve(students);
+        });
+    },
+    async getStudentFromDb(db, id_student) {
+        return new Promise((resolve) => {
+            db.transaction(['student'],'readwrite')
+                .objectStore('student')
+                .get(id_student)
+                .onsuccess = function(event) {
+                resolve(event.target.result);
+            };
         });
     },
     async addStudentToDb(db, student) {
@@ -291,4 +303,164 @@ export default {
             resolve();
         });
     },
+    async getRatingOfStudentFromDb(db, id_student, id_crit) {
+        return new Promise((resolve) => {
+            let ratings = [];
+            db.transaction(['rating'],'readonly')
+                .objectStore('rating')
+                .openCursor().onsuccess = function (event) {
+                let cursor = event.target.result;
+                if (cursor) {
+                    if (parseInt(cursor.value.id_student) === parseInt(id_student) && parseInt(cursor.value.id_crit) === parseInt(id_crit)) {
+                        ratings.push(cursor.value);
+                    }
+                    cursor.continue();
+                }
+                else {
+                    resolve(ratings);
+                }
+            };
+        });
+    },
+    async getRatingFromDb(db, id_class, id_crit, id_student) {
+        return new Promise((resolve) => {
+            let ratings = [];
+            let classroom = [];
+            db.transaction(['student'],'readonly')
+                .objectStore('student')
+                .openCursor().onsuccess = function (event) {
+                let cursor = event.target.result;
+                if (cursor) {
+                    if (parseInt(cursor.value.id_class) === parseInt(id_class)) {
+                        classroom.push(parseInt(cursor.value.id_student));
+                    }
+                    cursor.continue();
+                }
+                else {
+                    classroom = classroom.filter(item => (item !== parseInt(id_student)));
+                    db.transaction(['rating'],'readonly')
+                        .objectStore('rating')
+                        .openCursor().onsuccess = function (event) {
+                        let cursor = event.target.result;
+                        if (cursor) {
+                            if (classroom.includes(parseInt(cursor.value.id_student)) === true && parseInt(cursor.value.id_crit) === parseInt(id_crit)) {
+                                ratings.push(parseInt(cursor.value.score));
+                            }
+                            cursor.continue();
+                        }
+                        else {
+                            resolve(ratings);
+                        }
+                    };
+                }
+            };
+        });
+    },
+    async updateRatingToDb(db, rating) {
+        return new Promise((resolve) => {
+            db.transaction(['rating'],'readonly')
+                .objectStore('rating')
+                .openCursor().onsuccess = function (event) {
+                let cursor = event.target.result;
+                if (cursor) {
+                    if (parseInt(cursor.value.id_student) === rating.id_student && parseInt(cursor.value.id_crit) === parseInt(rating.id_crit)) {
+                        rating.id_rat = cursor.value.id_rat;
+                    }
+                    cursor.continue();
+                }
+                else {
+                    let request = null;
+                    if (!rating.id_rat) {
+                        request = db.transaction(['rating'],'readwrite')
+                            .objectStore('rating')
+                            .add(rating);
+                    }
+                    else {
+                        request = db.transaction(['rating'],'readwrite')
+                            .objectStore('rating')
+                            .put(rating);
+                    }
+                    request.onsuccess = function() {
+                        resolve();
+                    };
+                }
+            };
+        });
+    },
+    async getAvgStudent(db, id_student) {
+        return new Promise((resolve) => {
+            let sum = 0;
+            let nb = 0;
+            db.transaction(['rating'],'readonly')
+                .objectStore('rating')
+                .openCursor().onsuccess = function (event) {
+                let cursor = event.target.result;
+                if (cursor) {
+                    if (parseInt(cursor.value.id_student) === id_student) {
+                        sum += cursor.value.score;
+                        nb++;
+                    }
+                    cursor.continue();
+                }
+                else {
+                    if (!isNaN(sum/nb)) {
+                        resolve(Math.round(sum/nb*100)/100);
+                    }
+                    resolve("--");
+                }
+            };
+        });
+    },
+    async isCompletRatingStudent(db, id_student, id_eval) {
+        return new Promise((resolve) => {
+            let nbRate = 0;
+            let nbCrit = 0;
+            db.transaction(['rating'],'readonly')
+                .objectStore('rating')
+                .openCursor().onsuccess = function (event) {
+                let cursor = event.target.result;
+                if (cursor) {
+                    if (parseInt(cursor.value.id_student) === parseInt(id_student)) {
+                        nbRate++;
+                    }
+                    cursor.continue();
+                }
+                else {
+                    db.transaction(['criteria'],'readonly')
+                        .objectStore('criteria')
+                        .openCursor().onsuccess = function (event) {
+                        let cursor = event.target.result;
+                        if (cursor) {
+                            if (parseInt(cursor.value.id_eval) === parseInt(id_eval)) {
+                                nbCrit++;
+                            }
+                            cursor.continue();
+                        }
+                        else {
+                            resolve(nbRate === nbCrit);
+                        }
+                    };
+                }
+            };
+        });
+    },
+    async deleteRatingOfStudent(db, id_student) {
+        return new Promise((resolve) => {
+            let objectStore = db.transaction(['rating'],'readwrite')
+                .objectStore('rating');
+            objectStore.openCursor().onsuccess = function (event) {
+                let cursor = event.target.result;
+                if (cursor) {
+                    if (parseInt(cursor.value.id_student) === parseInt(id_student)) {
+                        objectStore.delete(cursor.value.id_rat);
+                    }
+                    cursor.continue();
+                }
+                else {
+                    resolve();
+                }
+            };
+        });
+    },
+
 }

@@ -1,6 +1,6 @@
 <template>
   <div>
-    <BasicListDisplay :element-list="students" :ready="ready" :mutable-object-add="studentToAdd" :title="title" :mutable-object-update="nameToUpdate" :message-display-condition="showCondition">
+    <BasicListDisplay :element-list="students" :ready="ready" :mutable-object-add="studentToAdd" :title="title" :mutable-object-update="nameToUpdate" :message-display-condition="showCondition" :element-list-left="'Prénom - Nom'" :element-list-right="'Intéraction'">
       <template v-slot:element_display="slotProps">
         <div class="headerList">
           <div class="headerLeft">
@@ -26,7 +26,7 @@
       </template>
       <template v-slot:element_show_display="slotProps">
         <div class="listItemLeft">
-          {{slotProps.element.firstname }} {{ slotProps.element.lastname }}
+          {{slotProps.element.firstname }} - {{ slotProps.element.lastname }}
         </div>
         <div class="listItemRight">
           <a class="update" @click="toggleUpdateStudent(slotProps.element)"><font-awesome-icon icon="fa-solid fa-pencil" /></a>
