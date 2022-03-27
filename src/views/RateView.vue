@@ -185,6 +185,9 @@ export default {
         this.moyenneG = "--";
         this.ecartG = "--";
       }
+      if (avg.length === 1) {
+        this.ecartG = "--";
+      }
     },
     async deleteStudentRating(id_student) {
       await bd.deleteRatingOfStudent(this.db, id_student);
@@ -228,6 +231,10 @@ export default {
             criteria.min = "--";
             criteria.max = "--";
             criteria.avg = "--";
+            criteria.ecart = "--";
+          }
+
+          if (ratings.length === 1) {
             criteria.ecart = "--";
           }
         }
