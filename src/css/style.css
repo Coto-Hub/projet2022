@@ -2,7 +2,10 @@ html, body {
     padding: 0;
     margin: 0;
     overflow-x: hidden;
-    font-size: 1.15rem;
+    font-size: 1rem;
+}
+html {
+    background-color: white;
 }
 .red, .green, .orange {
     font-weight: 700;
@@ -34,11 +37,6 @@ html, body {
 .disabled {
     color: grey;
 }
-html {
-    background-image: linear-gradient(to left bottom,#b3d7ff 0,#b3ffec);
-    background-repeat: no-repeat;
-    background-attachment: fixed;
-}
 ul, li {
     margin:0;
     padding: 0;
@@ -54,10 +52,8 @@ h1 {
     text-align: center;
 }
 .basicDisplay {
-    margin: 0 1rem;
     padding: 1rem;
     background-color: white;
-    border-radius: 0 0 1rem 1rem;
 }
 .add {
     width: 90%;
@@ -170,6 +166,7 @@ h1 {
 }
 .basicAlertDisplay .alertBox {
     width: 24rem;
+    max-width: 100%;
     margin: auto;
     border-radius: 2.5rem;
     padding: 1rem;
@@ -267,8 +264,6 @@ nav {
     justify-content: space-around;
     align-items: stretch;
     background-color: white;
-    margin: 0 1rem;
-    border-radius: 1rem 1rem 0 0;
 }
 
 nav a {
@@ -280,12 +275,6 @@ nav a {
     line-height: 3rem;
     vertical-align: middle;
     font-weight: 600;
-}
-nav a:first-child {
-    border-radius: 1rem 0 0 0;
-}
-nav a:last-child {
-    border-radius: 0 1rem 0 0;
 }
 nav a:not(.router-link-active):hover {
     background-image: linear-gradient(rgba(0,0,0,.3),rgba(0,0,0,.3));
@@ -341,6 +330,14 @@ h2 {
     cursor: help;
 }
 @media only screen and (min-width: 900px) {
+    html, body {
+        font-size: 1.15rem;
+    }
+    html {
+        background-image: linear-gradient(to left bottom,#b3d7ff 0,#b3ffec);
+        background-repeat: no-repeat;
+        background-attachment: fixed;
+    }
     .container {
         width: 80%;
         max-width: 800px;
@@ -348,5 +345,18 @@ h2 {
     .list, .add, .headerList {
         width: 70%;
     }
-
+    .basicDisplay {
+        margin: 0 1rem;
+        border-radius: 0 0 1rem 1rem;
+    }
+    nav {
+        border-radius: 1rem 1rem 0 0;
+        margin: 0 1rem;
+    }
+    nav a:first-child {
+        border-radius: 1rem 0 0 0;
+    }
+    nav a:last-child {
+        border-radius: 0 1rem 0 0;
+    }
 }
