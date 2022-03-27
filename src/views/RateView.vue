@@ -3,7 +3,6 @@
     <div  v-if="currently_rating[0] != null">
       <BasicListDisplay :element-list="students" :ready="ready" :message-display-condition="true" :title="title" :element-list-left="'Élève'" :element-list-right="'Moyenne'">
         <template v-slot:element_display>
-          <button type="button" @click="createAndDownloadCsv">Télécharger la liste en CSV</button>
           <div class="headerList">
             <div class="headerCenter">
               <button class="btn" @click="deleteCurrentlyRating">Changer de groupe et/ou d'évaluation</button>
@@ -15,6 +14,7 @@
             </div>
             <div class="headerRight">
               <p>Moyenne max : {{ maxG }}%</p>
+              <button class="btn" type="button" @click="createAndDownloadCsv">Exporter en CSV</button>
             </div>
           </div>
         </template>
@@ -314,7 +314,8 @@ export default {
       }
       this.currentStudent.avg = isNaN(sum/nb) ? "--" : sum/nb;
 
-      await this.updateRatingInfo();
+      await this.updateRatingInfo()
+      await this.updateInfoOfStudent();
       this.showAlert = true;
     },
     addCurrentlyRating: async function () {
@@ -332,6 +333,8 @@ export default {
         this.students = await bd.getStudentOfClassFromDb(this.db, this.currently_rating[0].id_class)
         this.criterias = await bd.getCriteriasFromDb(this.db, this.currently_rating[0].id_eval)
         this.addDisabled = false;
+        await this.updateRatingInfo()
+        await this.updateInfoOfStudent();
       }
     },
     deleteCurrentlyRating: async function() {
@@ -341,19 +344,44 @@ export default {
       this.groups = await bd.getClassroomFromDb(this.db);
     },
     createAndDownloadCsv: async function () {
+      let accent = [
+        /[\300-\306]/g, /[\340-\346]/g, // A, a
+        /[\310-\313]/g, /[\350-\353]/g, // E, e
+        /[\314-\317]/g, /[\354-\357]/g, // I, i
+        /[\322-\330]/g, /[\362-\370]/g, // O, o
+        /[\331-\334]/g, /[\371-\374]/g, // U, u
+        /[\321]/g, /[\361]/g, // N, n
+        /[\307]/g, /[\347]/g, // C, c
+      ];
+      let noaccent = ['A','a','E','e','I','i','O','o','U','u','N','n','C','c'];
       // On génère les datas pour le csv
       let csvData = [];
       csvData.push([this.evalName]);
       let colNames = ["Nom", "Prenom"];
       for (let criteria of this.criterias) {
-        colNames.push(criteria.name_crit);
+        let str = criteria.name_crit;
+        for(let i = 0; i < accent.length; i++){
+          str = str.replace(accent[i], noaccent[i]);
+        }
+        colNames.push(str);
       }
       csvData.push(colNames);
       for (let student of this.students) {
-        let studentData = [student.lastname, student.firstname];
+        let lastname = student.lastname;
+        let firstname = student.firstname;
+        for(let i = 0; i < accent.length; i++){
+          lastname = lastname.replace(accent[i], noaccent[i]);
+          firstname = firstname.replace(accent[i], noaccent[i]);
+        }
+        let studentData = [lastname, firstname];
         for (let criteria of this.criterias) {
           let rating = await bd.getRatingOfStudentFromDb(this.db, student.id_student, criteria.id_crit);
-          studentData.push(rating[0].score);
+          if (rating[0]) {
+            studentData.push(rating[0].score);
+          }
+          else {
+            studentData.push("none");
+          }
         }
         csvData.push(studentData)
       }
