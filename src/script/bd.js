@@ -1,3 +1,4 @@
+import bd from '../script/bd'
 export default {
     async getDb() {
         return new Promise((resolve, reject) => {
@@ -38,13 +39,13 @@ export default {
     },
     async deleteClassFromDb(db, id_class) {
         return new Promise((resolve) => {
-            let objectStore = db.transaction(['student'],'readwrite')
-                .objectStore('student');
-            objectStore.openCursor().onsuccess = function (event) {
+            db.transaction(['student'],'readwrite')
+                .objectStore('student')
+                .openCursor().onsuccess = function (event) {
                 let cursor = event.target.result;
                 if (cursor) {
                     if (parseInt(cursor.value.id_class) === parseInt(id_class)) {
-                        objectStore.delete(cursor.value.id_student);
+                        bd.deleteStudentToDb(db, cursor.value);
                     }
                     cursor.continue();
                 }
@@ -146,6 +147,7 @@ export default {
         });
     },
     async deleteStudentToDb(db, student) {
+        await this.deleteRatingOfStudent(db, student.id_student);
         return new Promise((resolve) => {
             db.transaction(['student'],'readwrite')
                 .objectStore('student')
@@ -181,13 +183,13 @@ export default {
     },
     async deleteEvalFromDb(db, id_eval) {
         return new Promise((resolve) => {
-            let objectStore = db.transaction(['criteria'],'readwrite')
-                .objectStore('criteria');
-            objectStore.openCursor().onsuccess = function (event) {
+            db.transaction(['criteria'],'readwrite')
+                .objectStore('criteria')
+                .openCursor().onsuccess = function (event) {
                 let cursor = event.target.result;
                 if (cursor) {
                     if (parseInt(cursor.value.id_eval) === parseInt(id_eval)) {
-                        objectStore.delete(cursor.value.id_crit);
+                        bd.deleteCriteriaToDb(db, cursor.value);
                     }
                     cursor.continue();
                 }
@@ -265,11 +267,24 @@ export default {
     },
     async deleteCriteriaToDb(db, criteria) {
         return new Promise((resolve) => {
-            db.transaction(['criteria'],'readwrite')
+            let objectStore = db.transaction(['rating'],'readwrite')
+                .objectStore('rating');
+            objectStore.openCursor().onsuccess = function (event) {
+                let cursor = event.target.result;
+                if (cursor) {
+                    if (parseInt(cursor.value.id_crit) === parseInt(criteria.id_crit)) {
+                        objectStore.delete(cursor.value.id_rat);
+                    }
+                    cursor.continue();
+                }
+            };
+            let request = db.transaction(['criteria'],'readwrite')
                 .objectStore('criteria')
                 .delete(criteria.id_crit);
 
-            resolve();
+            request.onsuccess = function() {
+                resolve();
+            };
         });
     },
     async getCurrentlyRatingFromDb(db) {

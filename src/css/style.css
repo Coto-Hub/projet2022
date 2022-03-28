@@ -316,6 +316,9 @@ h2 {
 .choice label select {
     padding: 0 1rem;
 }
+.choice p {
+    text-align: center;
+}
 .listRating {
     width: 100%;
     max-height: 20rem;

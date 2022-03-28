@@ -119,6 +119,12 @@ export default {
       return false;
     },
     async deleteEval() {
+      let currently_rating = await bd.getCurrentlyRatingFromDb(this.db);
+      if (currently_rating.length !== 0) {
+        if (currently_rating[0].id_eval === this.id) {
+          await bd.deleteCurrentlyRatingToDb(this.db, currently_rating[0])
+        }
+      }
       await bd.deleteEvalFromDb(this.db, this.id);
       this.$router.push({ name: "ShowEvaluations"})
     },

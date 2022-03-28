@@ -167,6 +167,12 @@ export default {
       await bd.updateStudentToDb(this.db, element);
     },
     async deleteClass() {
+      let currently_rating = await bd.getCurrentlyRatingFromDb(this.db);
+      if (currently_rating.length !== 0) {
+        if (currently_rating[0].id_class === this.id) {
+          await bd.deleteCurrentlyRatingToDb(this.db, currently_rating[0])
+        }
+      }
       await bd.deleteClassFromDb(this.db, this.id);
       this.$router.push({ name: "ShowClassrooms"})
     },

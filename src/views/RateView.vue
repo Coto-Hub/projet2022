@@ -148,8 +148,8 @@ export default {
       this.criterias = await bd.getCriteriasFromDb(this.db, this.currently_rating[0].id_eval)
       await this.updateInfoOfStudent();
       await this.updateRatingInfo();
+      this.title = "Entrain de noter le groupe " + this.groupName + " sur l'évaluation " + this.evalName;
     }
-    this.title = "Entrain de noter le groupe " + this.groupName + " sur l'évaluation" + this.evalName;
     this.ready = true;
   },
   methods: {
