@@ -53,7 +53,6 @@ export default {
         let evaluation = {
           name: this.evaluationToAdd.name
         };
-        console.log('about to add '+JSON.stringify(evaluation));
         await bd.addEvalToDb(this.db, evaluation);
         this.evaluations = await bd.getEvaluationFromDb(this.db);
         this.evaluationToAdd.name = "";

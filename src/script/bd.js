@@ -5,8 +5,7 @@ export default {
 
             let request = window.indexedDB.open('evaluationDB', 1);
 
-            request.onerror = e => {
-                console.log('Error opening db', e);
+            request.onerror = () => {
                 reject('Error');
             };
 
@@ -15,7 +14,6 @@ export default {
             };
 
             request.onupgradeneeded = e => {
-                console.log('onupgradeneeded');
                 let db = e.target.result;
                 db.createObjectStore("classroom", { autoIncrement: true, keyPath:'id_class' });
                 db.createObjectStore("evaluation", { autoIncrement: true, keyPath:'id_eval' });

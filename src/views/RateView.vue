@@ -246,7 +246,6 @@ export default {
     async updateScore() {
       for (let criteria of this.criterias) {
         if (criteria.isUpdate === true) {
-          console.log(criteria);
           let rating = {
             id_crit: parseInt(criteria.id_crit),
             id_student: parseInt(this.id_student),
@@ -325,7 +324,6 @@ export default {
           id_class: this.selectedGroup,
           id_eval: this.selectedEval,
         };
-        console.log('about to add '+JSON.stringify(currentlyRated));
         await bd.addCurrentlyRatedtToDb(this.db, currentlyRated);
         this.currently_rating = await bd.getCurrentlyRatingFromDb(this.db, this.id);
         this.evalName = await bd.getEvaluationNameFromDb(this.db, this.currently_rating[0].id_eval)

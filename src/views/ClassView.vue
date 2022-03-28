@@ -53,7 +53,6 @@ export default {
       let classroom = {
         name: this.studentToAdd.name,
       };
-      console.log('about to add '+JSON.stringify(classroom));
       await bd.addClassToDb(this.db, classroom);
       this.classrooms = await bd.getClassroomFromDb(this.db);
       this.addDisabled = false;

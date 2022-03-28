@@ -151,7 +151,6 @@ export default {
           id_eval: this.id,
           name_crit: this.criteriaToAdd.name_crit
         };
-        console.log('about to add '+JSON.stringify(criteria));
         await bd.addCriteriaToDb(this.db, criteria);
         this.criterias = await bd.getCriteriasFromDb(this.db, this.id);
         this.criteriaToAdd.name_crit = "";

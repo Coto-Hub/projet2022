@@ -135,10 +135,8 @@ export default {
           let reader = new FileReader();
           reader.onload = async function (e) {
             let lignes = e.target.result.split("\n");
-            console.log(e);
             for (const ligne of lignes) {
               let values = ligne.trim().split(";");
-              console.log(values);
               if (values.length < 2) {
                 values = ligne.trim().split(",")
               }
@@ -196,7 +194,6 @@ export default {
           firstname: this.studentToAdd.firstname,
           lastname: this.studentToAdd.lastname
         };
-        console.log('about to add '+JSON.stringify(student));
         await bd.addStudentToDb(this.db, student);
         this.students = await bd.getStudentOfClassFromDb(this.db, this.id);
         this.studentToAdd.firstname = "";
